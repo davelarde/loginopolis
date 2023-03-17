@@ -21,7 +21,13 @@ app.post("/register", async(req, res)=>{
   try{
     username = req.body.username
     password = req.body.password
+//hashing password
+const hashed = await bcrypt.hash(password, 7)
+const newUser = await User.create({username, password: hashed})
+res.send(`Succesfully created! ${username}`)
 
+  }catch(error){
+    res.send({message: " FIll out form again, something went wrong"}, error)
   }
 })
 
