@@ -17,7 +17,13 @@ app.get('/', async (req, res, next) => {
 
 // POST /register
 // TODO - takes req.body of {username, password} and creates a new user with the hashed password
+app.post("/register", async(req, res)=>{
+  try{
+    username = req.body.username
+    password = req.body.password
 
+  }
+})
 
 // POST /login
 // TODO - takes req.body of {username, password}, finds user by username, and compares the password with the hashed version from the DB
