@@ -24,7 +24,7 @@ app.post("/register", async(req, res)=>{
 //hashing password
 const hashed = await bcrypt.hash(password, 7)
 const newUser = await User.create({username, password: hashed})
-res.send(`Succesfully created! ${username}`)
+res.send(`successfully created user ${username}`)
 
   }catch(error){
     res.send({message: " FIll out form again, something went wrong"}, error)
@@ -33,6 +33,22 @@ res.send(`Succesfully created! ${username}`)
 
 // POST /login
 // TODO - takes req.body of {username, password}, finds user by username, and compares the password with the hashed version from the DB
+
+app.post("/login", async(req, res)=>{
+  try {
+    const {username, password} = req.body
+    const mightBuser = await User.findOne({where: {username}})
+    const hashedPW = mightBuser.password
+    const matched = await bcrypt.compare(password, hashedPW)
+    if(mightBuser && matched){
+      res.send(`successfully logged in user ${username}`).status(200)
+    }else{
+      res.send( "incorrect username and password", error).status(401)
+    }
+  }catch(error){
+    res.send({message: "Something went wrong"}, error).status(400)
+  }
+})
 
 // we export the app, not listening in here, so that we can run tests
 module.exports = app;
